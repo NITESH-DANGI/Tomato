@@ -10,15 +10,16 @@ import Account from "./pages/Account.tsx";
 import { useAppData } from "./context/AppContext.tsx";
 import Restaurant from "./pages/Restaurant.tsx";
 const App = () => {
-  const {user} = useAppData()
+  const { user } = useAppData()
 
-  if(user && user.role === "seller"){
-    return <Restaurant/>
+  if (user && user.role === "seller") {
+    return <Restaurant />
   }
   return (
     <>
       <BrowserRouter>
-      <Navbar/>
+        <Toaster />
+        <Navbar />
         <Routes>
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<Login />} />

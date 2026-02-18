@@ -1,13 +1,15 @@
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { useAppData } from "../context/AppContext";
 import { useEffect, useState } from "react";
-import { CgShoppingCart } from "react-icons/cg";
-import { BiMapPin, BiSearch } from "react-icons/bi";
+import { ShoppingCart, User, Search, MapPin } from "lucide-react";
+import logoText from "../assets/images/logo with text.png";
+
 const Navbar = () => {
   const { isAuth, city } = useAppData();
   const currLocation = useLocation();
 
   const isHomePage = currLocation.pathname === "/";
+  const isLoginPage = currLocation.pathname === "/login";
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
@@ -22,51 +24,63 @@ const Navbar = () => {
     }, 500);
     return () => clearTimeout(timer);
   }, [search]);
+
+  // If on login page, we might want a different or hidden navbar
+  // Based on "make it look inclusive", I'll make it absolute and transparent on the login page
+  if (isLoginPage) return null; // We already have the logo inside Login.tsx, so a second navbar is redundant
+
   return (
-    <div className="w-full bg-white shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+    <div className={`w-full ${isLoginPage ? 'absolute top-0 left-0 bg-transparent' : 'bg-white shadow-sm border-b border-gray-100'} z-50 transition-all duration-300`}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link
           to={"/"}
-          className="text-2xl font-bold text-[#E23744] cursor-pointer"
+          className="flex items-center gap-2"
         >
-          Tomato
+          <img src={logoText} alt="Tomato" className="h-8 w-auto" />
         </Link>
-        <div className="flex items-center gap-4">
+
+        <div className="flex items-center gap-6">
           <Link
             to={"/cart"}
-            className="text-lg font-medium text-gray-700 hover:text-[#E23744] relative"
+            className="group relative flex items-center justify-center p-2 rounded-full hover:bg-gray-50 transition-colors"
           >
-            <CgShoppingCart className="h-6 w-6 text-[#E23744]" />
-            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#E23744] text-xs text-white font-semibold">
+            <ShoppingCart className="h-6 w-6 text-gray-700 group-hover:text-[#FF4D4D] transition-colors" />
+            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#FF4D4D] text-[10px] text-white font-bold ring-2 ring-white">
               0
             </span>
           </Link>
+
           {isAuth ? (
-            <Link to="/account" className="font-medium text-[#E23744]">
-              Account
+            <Link to="/account" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 text-gray-700 hover:bg-gray-100 transition-all font-semibold">
+              <User size={18} />
+              <span>Account</span>
             </Link>
           ) : (
-            <Link to="/login" className="font-medium text-[#E23744]">
+            <Link
+              to="/login"
+              className="px-6 py-2 rounded-xl bg-[#FF4D4D] text-white hover:bg-[#D62828] transform active:scale-95 transition-all font-bold shadow-lg shadow-red-500/20"
+            >
               Login
             </Link>
           )}
         </div>
       </div>
+
       {isHomePage && (
-        <div className="border-t px-4 py-3">
-          <div className="mx-auto flex max-w-7xl items-center rounded-lg border shadow-sm">
-            <div className="flex items-center gap-2 px-3 border-r text-gray-700">
-              <BiMapPin className="h-4 w-4 text-[#E23744]" />
-              <span className="text-sm truncate max-w-35">{city}</span>
+        <div className="bg-white px-6 pb-4">
+          <div className="mx-auto flex max-w-7xl items-center rounded-2xl bg-gray-50 border border-gray-100 shadow-inner px-4 focus-within:ring-2 focus-within:ring-[#FF4D4D]/20 transition-all">
+            <div className="flex items-center gap-2 py-3 border-r border-gray-200 pr-4">
+              <MapPin className="h-4 w-4 text-[#FF4D4D]" />
+              <span className="text-sm font-medium text-gray-700 truncate max-w-[120px]">{city || "Location"}</span>
             </div>
-            <div className="flex flex-1 items-center gap-2 px-3">
-              <BiSearch className="h-4 w-4 text-gray-500" />
+            <div className="flex flex-1 items-center gap-3 pl-4">
+              <Search className="h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search for resturant"
+                placeholder="Search for restaurants, cuisines or a dish"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full py-2 text-sm outline-none"
+                className="w-full bg-transparent py-3 text-sm font-medium outline-none text-gray-800 placeholder:text-gray-400"
               />
             </div>
           </div>
