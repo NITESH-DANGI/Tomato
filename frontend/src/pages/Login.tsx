@@ -7,7 +7,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
 import { useAppData } from "../context/AppContext";
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, User } from "lucide-react";
 import logoText from "../assets/images/logo with text.png";
 import mascotTransparent from "../assets/images/mascot transparent bg.png";
 
@@ -56,7 +56,7 @@ const Login = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full lg:w-1/2 flex items-center justify-center p-8 z-10"
       >
-        <div className="w-full max-w-md space-y-10">
+        <div className="w-full max-w-md space-y-8">
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -66,7 +66,7 @@ const Login = () => {
             <img
               src={logoText}
               alt="Tomato Logo"
-              className="h-64 w-auto -mb-4 ml-[-30px] drop-shadow-[0_0_40px_rgba(255,77,77,0.4)] hover:scale-105 transition-transform duration-500"
+              className="h-56 w-auto -mb-4 ml-[-28px] drop-shadow-[0_0_40px_rgba(255,77,77,0.4)] hover:scale-105 transition-transform duration-500"
             />
             <h1 className="text-6xl font-extrabold text-white tracking-tight leading-[0.85]">
               Welcome <span className="text-[#FF4D4D]">Back</span>
@@ -119,86 +119,99 @@ const Login = () => {
             </div>
           </motion.div>
 
-          <footer className="pt-10 text-center sm:text-left">
-            <p className="text-sm text-gray-500 font-medium">
+          <footer className="pt-6 text-center sm:text-left text-gray-400">
+            <p className="text-sm font-medium">
               By joining, you agree to our{" "}
-              <a href="#" className="text-[#FF4D4D] hover:underline underline-offset-4 decoration-[#FF4D4D]/30 transition-all">Terms</a> &{" "}
-              <a href="#" className="text-[#FF4D4D] hover:underline underline-offset-4 decoration-[#FF4D4D]/30 transition-all border-b border-white/5 pb-0.5">Privacy</a>
+              <a href="#" className="text-[#FF4D4D] hover:underline transition-all">Terms</a> &{" "}
+              <a href="#" className="text-[#FF4D4D] hover:underline transition-all border-b border-white/5 pb-0.5">Privacy</a>
             </p>
           </footer>
         </div>
       </motion.div>
 
-      {/* Right Section: Mascot Showcase */}
-      <motion.div
-        initial={{ x: 100, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 1.2, ease: "easeOut" }}
-        className="hidden lg:flex w-1/2 relative flex-col items-center justify-center bg-[#080808]"
-      >
-        {/* Background Decor */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 -right-1/4 w-[500px] h-[500px] bg-[#FF4D4D]/10 rounded-full blur-[120px]"></div>
-          <div className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[100px]"></div>
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-        </div>
+      {/* Right Section: Massive Card Showcase */}
+      <div className="hidden lg:flex w-1/2 p-1.5 h-full items-center justify-center relative">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, x: 20 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="relative w-full h-full bg-[#1A1A1A] rounded-[1rem] overflow-hidden flex flex-col items-center justify-center shadow-[0_40px_100px_rgba(0,0,0,0.5)] border border-white/5"
+        >
+          {/* Background Decor */}
+          <div className="absolute inset-0">
+            <div className="absolute top-1/4 -right-1/4 w-[500px] h-[500px] bg-[#FF4D4D]/10 rounded-full blur-[120px]"></div>
+            <div className="absolute -bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[100px]"></div>
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+          </div>
 
-        {/* Mascot Wrapper */}
-        <div className="relative z-10 flex flex-col items-center">
-          <motion.div
-            animate={{
-              y: [0, -20, 0],
-              rotate: [0, 2, -2, 0]
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="relative"
-          >
-            {/* Glow Effect behind Mascot */}
-            <div className="absolute inset-0 bg-[#FF4D4D]/20 blur-[60px] rounded-full transform scale-75"></div>
-            <img
-              src={mascotTransparent}
-              alt="Tomato Mascot"
-              className="relative w-[450px] h-auto drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+          <div className="relative z-10 flex flex-col items-center px-12 text-center h-full justify-center">
+            <motion.div
+              animate={{
+                y: [0, -15, 0],
+                rotate: [0, 1, -1, 0]
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="relative"
+            >
+              <div className="absolute inset-0 bg-[#FF4D4D]/20 blur-[80px] rounded-full scale-75"></div>
+              <img
+                src={mascotTransparent}
+                alt="Tomato Mascot"
+                className="relative w-[560px] h-auto drop-shadow-[0_45px_90px_rgba(0,0,0,1)] max-h-[62vh] object-contain"
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="mt-6 space-y-4"
+            >
+              <h2 className="text-2xl font-bold text-white tracking-tight leading-tight uppercase font-['Ubuntu',sans-serif]">Food Delivery <span className="text-[#FF4D4D]">reimagined</span></h2>
+              <p className="text-gray-400 text-lg max-w-sm mx-auto">Discover curated flavors and hidden gems near you with our premium platform.</p>
+
+              <div className="flex items-center justify-center gap-4 pt-4">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="w-9 h-9 rounded-full border-2 border-[#1A1A1A] bg-gray-800 flex items-center justify-center text-gray-400">
+                      <User size={14} />
+                    </div>
+                  ))}
+                  <div className="w-9 h-9 rounded-full border-2 border-[#1A1A1A] bg-[#FF4D4D] flex items-center justify-center text-[9px] text-white font-bold">
+                    +2k
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-widest px-2">17k+ foodies joined</span>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Sparkles */}
+          {[...Array(10)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute h-1 w-1 bg-[#FF4D4D] rounded-full opacity-30"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [0, -100],
+                opacity: [0, 0.6, 0],
+              }}
+              transition={{
+                duration: 3 + Math.random() * 3,
+                repeat: Infinity,
+                delay: Math.random() * 5
+              }}
             />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="text-center mt-12 bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl"
-          >
-            <h2 className="text-2xl font-bold text-white mb-2">Food Delivery Reimagined</h2>
-            <p className="text-gray-400">Join 10k+ foodies on the most modern platform.</p>
-          </motion.div>
-        </div>
-
-        {/* Floating Decorative Elements */}
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute h-1 w-1 bg-[#FF4D4D] rounded-full"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -100],
-              opacity: [0, 1, 0],
-              scale: [0, 1.5, 0]
-            }}
-            transition={{
-              duration: 2 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 5
-            }}
-          />
-        ))}
-      </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </div>
   );
 };
