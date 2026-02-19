@@ -10,6 +10,7 @@ const Navbar = () => {
 
   const isHomePage = currLocation.pathname === "/";
   const isLoginPage = currLocation.pathname === "/login";
+  const isSelectRolePage = currLocation.pathname === "/select-role";
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") || "");
@@ -25,12 +26,11 @@ const Navbar = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
-  // If on login page, we might want a different or hidden navbar
-  // Based on "make it look inclusive", I'll make it absolute and transparent on the login page
-  if (isLoginPage) return null; // We already have the logo inside Login.tsx, so a second navbar is redundant
+  // If on login or select-role page, hide global navbar as they have their own integrated layouts
+  if (isLoginPage || isSelectRolePage) return null;
 
   return (
-    <div className={`w-full ${isLoginPage ? 'absolute top-0 left-0 bg-transparent' : 'bg-white shadow-sm border-b border-gray-100'} z-50 transition-all duration-300`}>
+    <div className={`w-full bg-white shadow-sm border-b border-gray-100 z-50 transition-all duration-300`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link
           to={"/"}
