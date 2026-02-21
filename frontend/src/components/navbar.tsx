@@ -1,92 +1,217 @@
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useAppData } from "../context/AppContext";
-import { useEffect, useState } from "react";
-import { ShoppingCart, User, Search, MapPin } from "lucide-react";
-import logoText from "../assets/images/logo with text.png";
+import {
+  ShoppingCart,
+  LayoutDashboard,
+  ClipboardList,
+  Settings,
+  Bike,
+  Home,
+  MapPinned,
+} from "lucide-react";
+import ProfileQuickView from "./ProfileQuickView";
+import CartDrawer from "./CartDrawer";
+import { motion } from "framer-motion";
+import logoImg from "../assets/images/logo without text.png";
 
 const Navbar = () => {
-  const { isAuth, city } = useAppData();
+  const { user, isAuth, cart } = useAppData();
   const currLocation = useLocation();
+  const [cartOpen, setCartOpen] = useState(false);
 
-  const isHomePage = currLocation.pathname === "/";
   const isLoginPage = currLocation.pathname === "/login";
   const isSelectRolePage = currLocation.pathname === "/select-role";
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get("search") || "");
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (search) {
-        setSearchParams({ search });
-      } else {
-        setSearchParams({});
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [search]);
-
-  // If on login or select-role page, hide global navbar as they have their own integrated layouts
   if (isLoginPage || isSelectRolePage) return null;
 
-  return (
-    <div className={`w-full bg-white shadow-sm border-b border-gray-100 z-50 transition-all duration-300`}>
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link
-          to={"/"}
-          className="flex items-center gap-2"
-        >
-          <img src={logoText} alt="Tomato" className="h-8 w-auto" />
-        </Link>
+  const role = user?.role;
 
-        <div className="flex items-center gap-6">
-          <Link
-            to={"/cart"}
-            className="group relative flex items-center justify-center p-2 rounded-full hover:bg-gray-50 transition-colors"
-          >
-            <ShoppingCart className="h-6 w-6 text-gray-700 group-hover:text-[#FF4D4D] transition-colors" />
-            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#FF4D4D] text-[10px] text-white font-bold ring-2 ring-white">
-              0
+  const customerLinks = [
+    { to: "/", icon: Home, label: "Home" },
+    { to: "/orders", icon: ClipboardList, label: "Orders" },
+    { to: "/address", icon: MapPinned, label: "Addresses" },
+  ];
+
+  const restaurantLinks = [
+    { to: "/", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/orders", icon: ClipboardList, label: "Orders" },
+    { to: "/settings", icon: Settings, label: "Settings" },
+  ];
+
+  const riderLinks = [
+    { to: "/", icon: Bike, label: "Console" },
+  ];
+
+  const navLinks = role === "seller" ? restaurantLinks : role === "rider" ? riderLinks : customerLinks;
+
+
+  return (
+    <>
+      <motion.nav
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        style={{
+          background: 'rgba(10,10,15,0.92)',
+          backdropFilter: 'blur(32px)',
+          WebkitBackdropFilter: 'blur(32px)',
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
+          height: '56px',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1280px',
+            margin: '0 auto',
+            padding: '0 24px',
+            height: '100%',
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
+            alignItems: 'center',
+          }}
+        >
+          {/* ─── Left: Logo ─── */}
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+            <img src={logoImg} alt="Tomato" style={{ height: '26px', width: 'auto' }} />
+            <span style={{ fontWeight: 700, fontSize: '17px', color: '#fff', letterSpacing: '-0.02em' }}>
+              Tomato
             </span>
           </Link>
 
-          {isAuth ? (
-            <Link to="/account" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-50 text-gray-700 hover:bg-gray-100 transition-all font-semibold">
-              <User size={18} />
-              <span>Account</span>
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className="px-6 py-2 rounded-xl bg-[#FF4D4D] text-white hover:bg-[#D62828] transform active:scale-95 transition-all font-bold shadow-lg shadow-red-500/20"
-            >
-              Login
-            </Link>
+          {/* ─── Center: Nav Links ─── */}
+          {isAuth && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              {navLinks.map(link => (
+                <NavItem key={link.to} to={link.to} Icon={link.icon} label={link.label} />
+              ))}
+            </div>
           )}
-        </div>
-      </div>
 
-      {isHomePage && (
-        <div className="bg-white px-6 pb-4">
-          <div className="mx-auto flex max-w-7xl items-center rounded-2xl bg-gray-50 border border-gray-100 shadow-inner px-4 focus-within:ring-2 focus-within:ring-[#FF4D4D]/20 transition-all">
-            <div className="flex items-center gap-2 py-3 border-r border-gray-200 pr-4">
-              <MapPin className="h-4 w-4 text-[#FF4D4D]" />
-              <span className="text-sm font-medium text-gray-700 truncate max-w-[120px]">{city || "Location"}</span>
-            </div>
-            <div className="flex flex-1 items-center gap-3 pl-4">
-              <Search className="h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search for restaurants, cuisines or a dish"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-transparent py-3 text-sm font-medium outline-none text-gray-800 placeholder:text-gray-400"
-              />
-            </div>
+          {/* ─── Right: Actions ─── */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}>
+            {!isAuth ? (
+              <Link to="/login" className="shimmer-btn" style={{ padding: '8px 20px', fontSize: '13px', borderRadius: '10px', textDecoration: 'none' }}>
+                Login
+              </Link>
+            ) : (
+              <>
+                {/* Role Badges */}
+                {role === "seller" && (
+                  <div className="badge-success" style={{ fontSize: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', animation: 'pulse 2s infinite' }} />
+                    Restaurant
+                  </div>
+                )}
+                {role === "rider" && (
+                  <div className="badge-info" style={{ fontSize: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <Bike size={11} /> Rider
+                  </div>
+                )}
+
+                {/* Cart Button (Customer only) */}
+                {(!role || role === "customer") && (
+                  <button
+                    onClick={() => setCartOpen(true)}
+                    style={{
+                      position: 'relative',
+                      padding: '8px',
+                      borderRadius: '10px',
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      color: 'rgba(255,255,255,0.6)',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+                      e.currentTarget.style.color = '#FF4433';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+                      e.currentTarget.style.color = 'rgba(255,255,255,0.6)';
+                    }}
+                  >
+                    <ShoppingCart size={17} />
+                    {cart.length > 0 && (
+                      <span style={{
+                        position: 'absolute',
+                        top: '-4px',
+                        right: '-4px',
+                        height: '16px',
+                        width: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '50%',
+                        background: '#FF4433',
+                        color: '#fff',
+                        fontSize: '9px',
+                        fontWeight: 900,
+                        boxShadow: '0 0 0 2px #0a0a0f',
+                      }}>
+                        {cart.length}
+                      </span>
+                    )}
+                  </button>
+                )}
+
+                <ProfileQuickView />
+              </>
+            )}
           </div>
         </div>
-      )}
-    </div>
+      </motion.nav>
+
+      {/* Cart Drawer */}
+      <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
+    </>
+  );
+};
+
+// ─── NavItem ───
+const NavItem = ({ to, Icon, label }: { to: string; Icon: React.ComponentType<{ size?: number }>; label: string }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
+  return (
+    <Link
+      to={to}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        padding: '6px 14px',
+        borderRadius: '8px',
+        fontSize: '13px',
+        fontWeight: 500,
+        textDecoration: 'none',
+        transition: 'all 0.2s',
+        background: isActive ? 'rgba(255,255,255,0.08)' : 'transparent',
+        color: isActive ? '#fff' : 'rgba(255,255,255,0.45)',
+        border: isActive ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
+      }}
+      onMouseEnter={e => {
+        if (!isActive) {
+          e.currentTarget.style.color = 'rgba(255,255,255,0.75)';
+          e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+        }
+      }}
+      onMouseLeave={e => {
+        if (!isActive) {
+          e.currentTarget.style.color = 'rgba(255,255,255,0.45)';
+          e.currentTarget.style.background = 'transparent';
+        }
+      }}
+    >
+      <Icon size={15} />
+      <span>{label}</span>
+    </Link>
   );
 };
 

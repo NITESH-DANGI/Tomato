@@ -1,1 +1,446 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --color-tomato-red: #FF4433;
+  --color-tomato-dark: #E63B2C;
+  --color-tomato-glow: #FF443344;
+  --color-surface: #0a0a0f;
+  --color-surface-raised: #111118;
+  --color-surface-overlay: #1a1a24;
+  --font-luxury: 'DM Serif Display', serif;
+  --font-outfit: 'Outfit', sans-serif;
+}
+
+/* ─── Root & Body ─── */
+:root {
+  font-family: 'Outfit', sans-serif;
+  color: #e2e2e8;
+}
+
+html {
+  background-color: #0a0a0f;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #0a0a0f;
+  color: #e2e2e8;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: #0a0a0f;
+}
+
+/* ─── Heading Font Scheme ─── */
+h1,
+h2,
+.font-luxury {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+}
+
+h1 {
+  font-size: 2.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   GLASS SYSTEM — using raw CSS, no @apply chains
+   ═══════════════════════════════════════════════════ */
+
+.glass-dark {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.glass-card-hover {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 40px rgba(255, 68, 51, 0.08);
+}
+
+.glass-nav {
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #ffffff;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.glass-input:focus {
+  border-color: rgba(255, 68, 51, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 68, 51, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════
+   LAYOUT SYSTEM
+   ═══════════════════════════════════════════════════ */
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background: #0a0a0f;
+  overflow: hidden;
+}
+
+.sidebar-container {
+  width: 80px;
+  height: 100%;
+  background: #111118;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0;
+  gap: 40px;
+  z-index: 40;
+}
+
+.main-content {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding: 32px 24px;
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    padding: 32px 40px;
+  }
+
+  .sidebar-container {
+    width: 96px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════════════ */
+
+.btn-premium {
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-premium:active {
+  transform: scale(0.95);
+}
+
+.btn-primary {
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  background: #FF4433;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(255, 68, 51, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #E63B2C;
+  box-shadow: 0 8px 32px rgba(255, 68, 51, 0.35);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary {
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.btn-ghost {
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Shimmer Button ─── */
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+  background: #FF4433;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(255, 68, 51, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.shimmer-btn:hover {
+  background: #E63B2C;
+  box-shadow: 0 8px 32px rgba(255, 68, 51, 0.35);
+}
+
+.shimmer-btn:active {
+  transform: scale(0.95);
+}
+
+.shimmer-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  animation: shimmer 3s infinite;
+}
+
+/* ─── Pulse Ring ─── */
+.pulse-ring {
+  position: relative;
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid #FF4433;
+  animation: pulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ═══════════════════════════════════════════════════
+   BENTO GRID
+   ═══════════════════════════════════════════════════ */
+
+.bento-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.bento-hero {
+  grid-column: span 12;
+}
+
+@media (min-width: 768px) {
+  .bento-lg {
+    grid-column: span 8;
+  }
+
+  .bento-md {
+    grid-column: span 6;
+  }
+
+  .bento-sm {
+    grid-column: span 4;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   STATUS BADGES
+   ═══════════════════════════════════════════════════ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.badge-info {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.badge-neutral {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* ═══════════════════════════════════════════════════
+   UTILITY HELPERS
+   ═══════════════════════════════════════════════════ */
+
+.text-dim {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.text-muted {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.text-bright {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ═══════════════════════════════════════════════════
+   KEYFRAMES
+   ═══════════════════════════════════════════════════ */
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes pulseRing {
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}

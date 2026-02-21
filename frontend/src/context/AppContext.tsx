@@ -7,10 +7,10 @@ import {
   type ReactNode,
 } from "react";
 import { authService } from "../main";
-import type { AppContextType, LocationData, User } from "../types";
+import type { AppContextType, LocationData, User, CartItem } from "../types";
 import { Toaster } from "react-hot-toast";
-
-
+import { restaurantService } from "../main";
+import { toast } from "react-hot-toast";
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -26,6 +26,80 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const [location, setLocation] = useState<LocationData | null>(null);
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [city, setCity] = useState("Fetching location...");
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cartSubtotal, setCartSubtotal] = useState(0);
+
+  const headers = () => ({
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  });
+
+  // ─── Cart Functions (matching backend exactly) ───
+
+  const fetchCart = async () => {
+    try {
+      const { data } = await axios.get(`${restaurantService}/api/cart/all`, {
+        headers: headers(),
+      });
+      setCart(data.cart || []);
+      setCartSubtotal(data.subtotal || 0);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
+  };
+
+  const addToCart = async (restaurantId: string, itemId: string) => {
+    try {
+      await axios.post(
+        `${restaurantService}/api/cart/add`,
+        { restaurantId, itemId },
+        { headers: headers() }
+      );
+      toast.success("Added to cart");
+      fetchCart();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Error adding to cart");
+    }
+  };
+
+  const incrementCart = async (itemId: string) => {
+    try {
+      await axios.put(
+        `${restaurantService}/api/cart/inc`,
+        { itemId },
+        { headers: headers() }
+      );
+      fetchCart();
+    } catch (error) {
+      console.error("Error incrementing:", error);
+    }
+  };
+
+  const decrementCart = async (itemId: string) => {
+    try {
+      await axios.put(
+        `${restaurantService}/api/cart/dec`,
+        { itemId },
+        { headers: headers() }
+      );
+      fetchCart();
+    } catch (error) {
+      console.error("Error decrementing:", error);
+    }
+  };
+
+  const clearCart = async () => {
+    try {
+      await axios.delete(`${restaurantService}/api/cart/clear`, {
+        headers: headers(),
+      });
+      setCart([]);
+      setCartSubtotal(0);
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+    }
+  };
+
+  // ─── Auth ───
 
   async function fetchUser() {
     try {
@@ -38,15 +112,19 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       });
       setUser(data);
       setIsAuth(true);
+      fetchCart();
     } catch (error) {
       console.error("Error fetching user:", error);
     } finally {
       setLoading(false);
     }
   }
+
   useEffect(() => {
     fetchUser();
   }, []);
+
+  // ─── Location ───
 
   useEffect(() => {
     if (!navigator.geolocation)
@@ -68,11 +146,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         });
         setCity(
           data.address.city ||
-            data.address.town ||
-            data.address.village ||
-            "Your location",
+          data.address.town ||
+          data.address.village ||
+          "Your location",
         );
-        setLoadingLocation(false)
+        setLoadingLocation(false);
       } catch (error) {
         setLocation({
           latitude,
@@ -80,7 +158,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
           formattedAddress: "current location",
         });
         setCity("Failed to fetch location");
-        setLoadingLocation(false)
+        setLoadingLocation(false);
       }
     });
   }, []);
@@ -94,14 +172,20 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         location,
         loadingLocation,
         city,
+        cart,
+        cartSubtotal,
+        addToCart,
+        incrementCart,
+        decrementCart,
+        clearCart,
+        fetchCart,
         setUser,
         setIsAuth,
         setLoading,
       }}
     >
       {children}
-
-      <Toaster/>
+      <Toaster />
     </AppContext.Provider>
   );
 };

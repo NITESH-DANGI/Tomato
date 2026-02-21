@@ -94,8 +94,8 @@ const SelectRole = () => {
                     />
 
                     <div className="space-y-2">
-                        <h1 className="text-4xl font-extrabold text-white tracking-tight">
-                            Choose your <span className="text-[#FF4D4D]">Role</span>
+                        <h1 className="text-5xl font-normal text-white tracking-tight font-luxury italic">
+                            Choose your <span className="text-[#FF4D4D]">Perspective</span>
                         </h1>
                         <p className="text-gray-400 text-lg font-light">
                             How would you like to use Tomato today?
@@ -111,14 +111,14 @@ const SelectRole = () => {
                                 transition={{ delay: 0.3 + index * 0.1 }}
                                 onClick={() => setRole(option.id)}
                                 className={`relative group flex flex-col items-center p-8 rounded-[1.5rem] border transition-all duration-300 ${role === option.id
-                                        ? "bg-[#FF4D4D]/10 border-[#FF4D4D] shadow-[0_0_40px_rgba(255,77,77,0.15)]"
-                                        : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/[0.08]"
+                                    ? "bg-[#FF4D4D]/10 border-[#FF4D4D] shadow-[0_0_40px_rgba(255,77,77,0.15)]"
+                                    : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/[0.08]"
                                     }`}
                             >
                                 <div
                                     className={`p-4 rounded-2xl mb-5 transition-all duration-300 ${role === option.id
-                                            ? "bg-[#FF4D4D] text-white"
-                                            : "bg-white/5 text-gray-400 group-hover:text-white"
+                                        ? "bg-[#FF4D4D] text-white"
+                                        : "bg-white/5 text-gray-400 group-hover:text-white"
                                         }`}
                                 >
                                     <option.icon size={28} />
@@ -158,9 +158,9 @@ const SelectRole = () => {
                         transition={{ delay: 0.7 }}
                         disabled={!role || loading}
                         onClick={addRole}
-                        className={`group mt-8 flex items-center justify-center gap-3 w-full max-w-sm rounded-xl py-4 font-bold text-lg transition-all active:scale-[0.98] ${role && !loading
-                                ? "bg-[#FF4D4D] text-white hover:bg-[#FF3333] shadow-[0_10px_30px_rgba(255,77,77,0.2)]"
-                                : "bg-white/5 text-gray-600 cursor-not-allowed border border-white/5"
+                        className={`btn-primary group mt-8 flex items-center justify-center gap-3 w-full max-w-sm !rounded-2xl !py-5 !text-lg transition-all active:scale-[0.98] ${role && !loading
+                            ? "bg-[#FF4D4D] text-white hover:bg-[#FF3333] shadow-[0_20px_40px_rgba(255,77,77,0.2)]"
+                            : "bg-white/5 text-gray-600 cursor-not-allowed border border-white/5"
                             }`}
                     >
                         {loading ? (

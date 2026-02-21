@@ -5,6 +5,7 @@ export interface User {
   name: string;
   email: string;
   image: string;
+  avatar?: string;
   role: string;
 }
 
@@ -14,6 +15,23 @@ export interface LocationData {
   formattedAddress: string;
 }
 
+export interface CartItem {
+  _id: string;
+  itemId: {
+    _id: string;
+    name: string;
+    price: number;
+    image: string;
+    description?: string;
+    isAvailable?: boolean;
+  };
+  restaurantId: {
+    _id: string;
+    name: string;
+  };
+  quauntity: number;
+}
+
 export interface AppContextType {
   user: User | null;
   isAuth: boolean;
@@ -21,6 +39,13 @@ export interface AppContextType {
   location: LocationData | null;
   loadingLocation: boolean;
   city: string;
+  cart: CartItem[];
+  cartSubtotal: number;
+  addToCart: (restaurantId: string, itemId: string) => void;
+  incrementCart: (itemId: string) => void;
+  decrementCart: (itemId: string) => void;
+  clearCart: () => void;
+  fetchCart: () => void;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
